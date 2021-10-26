@@ -17,6 +17,14 @@ const StackNavigator = () => {
           headerStyle: {
             backgroundColor: Platform.OS === 'android' ? colors.primary : colors.white,
           },
+          headerTitleStyle: {
+            color: colors.white,
+            fontFamily: 'open-sans-bold',
+          },
+          headerBackTitleStyle: {
+            color: colors.white,
+            fontFamily: 'open-sans',
+          },
           headerTintColor: Platform.OS === 'android' ? colors.white : colors.primary,
         }}
       >
