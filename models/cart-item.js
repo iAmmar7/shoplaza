@@ -9,9 +9,9 @@ class CartItem {
   get() {
     return {
       quantity: this.quantity,
-      productPrice: this.productPricequantity,
-      productTitle: this.productTitlequantity,
-      sum: this.sumquantity,
+      productPrice: this.productPrice,
+      productTitle: this.productTitle,
+      sum: this.sum,
     };
   }
 }

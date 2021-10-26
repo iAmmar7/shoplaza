@@ -30,9 +30,32 @@ export const cartSlice = createSlice({
         totalAmount: state.totalAmount + price,
       };
     },
+    removeFromCart: (state, action) => {
+      const productId = action.payload;
+      const selectedCartItem = state.items[productId];
+      const currentQty = selectedCartItem.quantity;
+      let updatedCartItems;
+      if (currentQty > 1) {
+        // need to reduce it, not erase it
+        const updatedCartItem = new CartItem(
+          selectedCartItem.quantity - 1,
+          selectedCartItem.productPrice,
+          selectedCartItem.productTitle,
+          selectedCartItem.sum - selectedCartItem.productPrice
+        ).get();
+        updatedCartItems = { ...state.items, [productId]: updatedCartItem };
+      } else {
+        updatedCartItems = { ...state.items };
+        delete updatedCartItems[productId];
+      }
+      return {
+        items: updatedCartItems,
+        totalAmount: state.totalAmount - selectedCartItem.productPrice,
+      };
+    },
   },
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, removeFromCart } = cartSlice.actions;
 
 export default cartSlice.reducer;
