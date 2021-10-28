@@ -13,7 +13,7 @@ export const orderSlice = createSlice({
     addOrder: (state, action) => {
       const { payload: { cartItems, totalAmount } = {} } = action;
 
-      const newOrder = new Order(new Date().toString(), cartItems, totalAmount, new Date().toDateString()).get();
+      const newOrder = new Order(new Date().toString(), cartItems, totalAmount, JSON.stringify(new Date())).get();
       state.orders = state.orders.concat(newOrder);
     },
   },

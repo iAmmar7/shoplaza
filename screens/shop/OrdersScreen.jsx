@@ -1,6 +1,13 @@
 import React from 'react';
-import { FlatList, Text } from 'react-native';
+import { FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
+import dayjs from 'dayjs';
+
+import OrderItem from '../../components/shop/OrderItem';
+
+const readableDate = (date) => {
+  return dayjs(date).format('MMMM DD YYYY, hh:mm');
+};
 
 const OrdersScreen = () => {
   const { orders } = useSelector((state) => state.orders);
@@ -9,7 +16,15 @@ const OrdersScreen = () => {
     <FlatList
       data={orders}
       keyExtractor={(item) => item.id}
-      renderItem={(itemData) => <Text>{itemData.item?.totalAmount}</Text>}
+      renderItem={(itemData) => {
+        return (
+          <OrderItem
+            amount={itemData.item.totalAmount}
+            date={readableDate(itemData.item.date)}
+            items={itemData.item.items}
+          />
+        );
+      }}
     />
   );
 };

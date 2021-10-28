@@ -11,7 +11,7 @@ class Order {
       id: this.id,
       items: this.items,
       totalAmount: this.totalAmount,
-      date: this.date,
+      date: JSON.parse(this.date),
     };
   }
 }
