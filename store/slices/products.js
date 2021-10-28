@@ -1,4 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAction } from '@reduxjs/toolkit';
+
+const deleteProduct = createAction('deleteProduct');
 
 import PRODUCTS from '../../data/dummy-data';
 
@@ -10,8 +12,8 @@ const initialState = {
 export const productSlice = createSlice({
   name: 'products',
   initialState,
-  reducers: {
-    deleteProduct: (state, action) => {
+  extraReducers: {
+    [deleteProduct]: (state, action) => {
       return {
         userProducts: state.userProducts.filter((product) => product.id !== action.payload),
         availableProducts: state.availableProducts.filter((product) => product.id !== action.payload),
@@ -20,6 +22,6 @@ export const productSlice = createSlice({
   },
 });
 
-export const { deleteProduct } = productSlice.actions;
+export { deleteProduct };
 
 export default productSlice.reducer;

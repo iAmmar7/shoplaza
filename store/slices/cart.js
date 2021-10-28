@@ -1,5 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAction } from '@reduxjs/toolkit';
 
+const deleteProduct = createAction('deleteProduct');
 import CartItem from '../../models/cart-item';
 
 const initialState = {
@@ -55,6 +56,22 @@ export const cartSlice = createSlice({
     },
     clearCart: () => {
       return initialState;
+    },
+  },
+  // Defined as extraReducer, so that it can be invoked through product reducer which has the same name action.
+  extraReducers: {
+    [deleteProduct]: (state, action) => {
+      if (!state.items[action.payload]) {
+        return state;
+      }
+      const updatedItems = { ...state.items };
+      const itemTotal = state.items[action.payload].sum;
+      delete updatedItems[action.payload];
+      return {
+        ...state,
+        items: updatedItems,
+        totalAmount: state.totalAmount - itemTotal,
+      };
     },
   },
 });
