@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, Text, TextInput, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../components/UI/HeaderButton';
+import { createProduct, updateProduct } from '../../store/slices/products';
 
 const EditProductScreen = (props) => {
   const {
@@ -15,10 +16,16 @@ const EditProductScreen = (props) => {
   const [imageUrl, setImageUrl] = useState(editedProduct ? editedProduct.imageUrl : '');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState(editedProduct ? editedProduct.description : '');
+  const dispatch = useDispatch();
 
   const submitHandler = useCallback(() => {
-    console.log('Submitting!');
-  }, []);
+    if (editedProduct) {
+      dispatch(updateProduct({ productId, title, description, imageUrl }));
+    } else {
+      dispatch(createProduct({ title, description, imageUrl, price: +price }));
+    }
+    navigation.goBack();
+  }, [dispatch, productId, title, description, imageUrl, price]);
 
   useEffect(() => {
     navigation.setOptions({

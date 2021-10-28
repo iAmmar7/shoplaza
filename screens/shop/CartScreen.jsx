@@ -3,6 +3,7 @@ import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 import { useSelector, useDispatch, batch } from 'react-redux';
 
 import CartItem from '../../components/shop/CartItem';
+import Card from '../../components/UI/Card';
 import { removeFromCart, clearCart } from '../../store/slices/cart';
 import { addOrder } from '../../store/slices/orders';
 import colors from '../../constants/colors';
@@ -27,7 +28,7 @@ const CartScreen = () => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.summary}>
+      <Card style={styles.summary}>
         <Text style={styles.summaryText}>
           Total: <Text style={styles.amount}>${Math.round(totalAmount.toFixed(2) * 100) / 100}</Text>
         </Text>
@@ -36,13 +37,10 @@ const CartScreen = () => {
           title="Order Now"
           disabled={cartItems.length === 0}
           onPress={() => {
-            batch(() => {
-              dispatch(addOrder({ cartItems, totalAmount }));
-              dispatch(clearCart());
-            });
+            dispatch(addOrder(cartItems, totalAmount));
           }}
         />
-      </View>
+      </Card>
       <FlatList
         data={cartItems}
         keyExtractor={(item) => item.productId}
@@ -51,6 +49,7 @@ const CartScreen = () => {
             quantity={itemData.item.quantity}
             title={itemData.item.productTitle}
             amount={itemData.item.sum}
+            deletable
             onRemove={() => {
               dispatch(removeFromCart(itemData.item.productId));
             }}
@@ -71,13 +70,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 20,
     padding: 10,
-    shadowColor: 'black',
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
   },
   summaryText: {
     fontFamily: 'open-sans-bold',

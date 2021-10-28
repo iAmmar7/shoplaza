@@ -117,6 +117,7 @@ const AdminNavigator = () => {
         name="UserProducts"
         component={UserProductsScreen}
         options={({ navigation }) => ({
+          title: 'Your Products',
           headerLeft: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
               <Item
