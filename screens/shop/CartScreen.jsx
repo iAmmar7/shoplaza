@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, batch } from 'react-redux';
 
 import CartItem from '../../components/shop/CartItem';
-import { removeFromCart } from '../../store/slices/cart';
+import { removeFromCart, clearCart } from '../../store/slices/cart';
 import { addOrder } from '../../store/slices/orders';
 import colors from '../../constants/colors';
 
@@ -36,7 +36,10 @@ const CartScreen = () => {
           title="Order Now"
           disabled={cartItems.length === 0}
           onPress={() => {
-            dispatch(addOrder({ cartItems, totalAmount }));
+            batch(() => {
+              dispatch(addOrder({ cartItems, totalAmount }));
+              dispatch(clearCart());
+            });
           }}
         />
       </View>
