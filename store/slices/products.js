@@ -10,9 +10,16 @@ const initialState = {
 export const productSlice = createSlice({
   name: 'products',
   initialState,
-  reducers: {},
+  reducers: {
+    deleteProduct: (state, action) => {
+      return {
+        userProducts: state.userProducts.filter((product) => product.id !== action.payload),
+        availableProducts: state.availableProducts.filter((product) => product.id !== action.payload),
+      };
+    },
+  },
 });
 
-// export const { toggleFavorite, setFilters } = productSlice.actions;
+export const { deleteProduct } = productSlice.actions;
 
 export default productSlice.reducer;

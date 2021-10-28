@@ -10,6 +10,7 @@ import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
+import UserProductsScreen from '../screens/user/UserProductsScreen';
 import HeaderButton from '../components/UI/HeaderButton';
 import colors from '../constants/colors';
 
@@ -108,6 +109,30 @@ const OrdersNavigator = () => {
   );
 };
 
+const AdminNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={defaultStackOptions}>
+      <Stack.Screen
+        name="UserProducts"
+        component={UserProductsScreen}
+        options={({ navigation }) => ({
+          headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+              <Item
+                title="Menu"
+                iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
+                onPress={() => {
+                  navigation.toggleDrawer();
+                }}
+              />
+            </HeaderButtons>
+          ),
+        })}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const DrawerNavigator = () => {
   return (
     <NavigationContainer>
@@ -134,6 +159,16 @@ const DrawerNavigator = () => {
             drawerLabel: 'Orders',
             drawerIcon: ({ color }) => (
               <Ionicons name={Platform.OS === 'android' ? 'md-list' : 'ios-list'} size={23} color={color} />
+            ),
+          })}
+        />
+        <Drawer.Screen
+          name="AdminDrawer"
+          component={AdminNavigator}
+          options={() => ({
+            drawerLabel: 'Admin',
+            drawerIcon: ({ color }) => (
+              <Ionicons name={Platform.OS === 'android' ? 'md-create' : 'ios-create'} size={23} color={color} />
             ),
           })}
         />
