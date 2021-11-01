@@ -1,21 +1,9 @@
-import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import Product from '../../models/product';
 import PRODUCTS from '../../data/dummy-data';
-import { FIREBASE_URL } from '../../constants/api';
 
-const deleteProduct = createAction('deleteProduct');
-
-const createProduct = createAsyncThunk('products/createProduct', async (data) => {
-  const res = await fetch(`${FIREBASE_URL}/products.json`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  return await res.json();
-});
+import { createProduct, deleteProduct, updateProduct as updateProductAction } from '../actions/products';
 
 const initialState = {
   availableProducts: PRODUCTS,
@@ -29,25 +17,9 @@ export const productSlice = createSlice({
   initialState,
   reducers: {
     updateProduct: (state, action) => {
-      const { productId, title, description, imageUrl } = action.payload;
-      const productIndex = state.userProducts.findIndex((prod) => prod.id === productId);
-      const updatedProduct = new Product(
-        productId,
-        state.userProducts[productIndex].ownerId,
-        title,
-        imageUrl,
-        description,
-        state.userProducts[productIndex].price
-      ).get();
-      const updatedUserProducts = [...state.userProducts];
-      updatedUserProducts[productIndex] = updatedProduct;
-      const availableProductIndex = state.availableProducts.findIndex((prod) => prod.id === productId);
-      const updatedAvailableProducts = [...state.availableProducts];
-      updatedAvailableProducts[availableProductIndex] = updatedProduct;
-      return {
-        availableProducts: updatedAvailableProducts,
-        userProducts: updatedUserProducts,
-      };
+      const { availableProducts, userProducts } = updateProductAction(state, action);
+      state.availableProducts = availableProducts;
+      state.userProducts = userProducts;
     },
   },
   extraReducers: (builder) => {
@@ -64,6 +36,9 @@ export const productSlice = createSlice({
       state.availableProducts = [...state.availableProducts, newProduct];
       state.userProducts = [...state.userProducts, newProduct];
       state.loading = false;
+    });
+    builder.addCase(createProduct.rejected, (state, action) => {
+      state.error = action;
     });
   },
 });
