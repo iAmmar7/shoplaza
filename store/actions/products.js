@@ -3,18 +3,45 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import Product from '../../models/product';
 import { FIREBASE_URL } from '../../constants/api';
 
-export const deleteProduct = createAction('deleteProduct');
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
+  const response = await fetch(`${FIREBASE_URL}/products.json`);
+
+  if (!response.ok) throw new Error('Something went wrong!');
+
+  const resData = await response.json();
+
+  let loadedProducts = [];
+
+  for (const key in resData) {
+    loadedProducts.push(
+      new Product(
+        key,
+        'u1',
+        resData[key].title,
+        resData[key].imageUrl,
+        resData[key].description,
+        resData[key].price
+      ).get()
+    );
+  }
+  return loadedProducts;
+});
 
 export const createProduct = createAsyncThunk('products/createProduct', async (data) => {
-  const res = await fetch(`${FIREBASE_URL}/products.json`, {
+  const response = await fetch(`${FIREBASE_URL}/products.json`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
-  return await res.json();
+
+  if (!response.ok) throw new Error('Something went wrong!');
+
+  return await response.json();
 });
+
+export const deleteProduct = createAction('deleteProduct');
 
 export const updateProduct = (state, action) => {
   const { productId, title, description, imageUrl } = action.payload;

@@ -1,15 +1,25 @@
-import React from 'react';
-import { FlatList, Button } from 'react-native';
+import React, { useEffect } from 'react';
+import { FlatList, Button, ActivityIndicator, View, Text, Pressable, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ProductItem from '../../components/shop/ProductItem';
 import { addToCart } from '../../store/slices/cart';
+import { fetchProducts } from '../../store/slices/products';
 import colors from '../../constants/colors';
 
 const ProductsOverviewScreen = (props) => {
   const { navigation } = props;
-  const products = useSelector((state) => state.products.availableProducts);
+  const { availableProducts, loading, error } = useSelector((state) => state.products);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => dispatch(fetchProducts()));
+    return unsubscribe;
+  }, []);
 
   const selectItemHandler = (id, title) => {
     navigation.navigate('ProductDetail', {
@@ -18,9 +28,36 @@ const ProductsOverviewScreen = (props) => {
     });
   };
 
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text>{error}</Text>
+        <Pressable
+          onPress={() => dispatch(fetchProducts())}
+          style={styles.button}
+          android_ripple={{
+            color: '#3c3c3c',
+          }}
+        >
+          <Text style={styles.buttonText}>Try again?</Text>
+        </Pressable>
+      </View>
+    );
+  }
+
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  // if(!loading && availableProducts.length === 0)
+
   return (
     <FlatList
-      data={products}
+      data={availableProducts}
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => (
         <ProductItem
@@ -50,5 +87,22 @@ const ProductsOverviewScreen = (props) => {
     />
   );
 };
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    marginVertical: 10,
+    backgroundColor: colors.primary,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+  },
+  buttonText: {
+    color: colors.white,
+  },
+});
 
 export default ProductsOverviewScreen;
