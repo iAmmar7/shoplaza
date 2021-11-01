@@ -6,14 +6,15 @@ import { FIREBASE_URL } from '../../constants/api';
 
 const deleteProduct = createAction('deleteProduct');
 
-const createProduct = createAsyncThunk('products/createProduct', (data) => {
-  return fetch(`${FIREBASE_URL}/products.json`, {
+const createProduct = createAsyncThunk('products/createProduct', async (data) => {
+  const res = await fetch(`${FIREBASE_URL}/products.json`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then((res) => res.json());
+  });
+  return await res.json();
 });
 
 const initialState = {
@@ -27,14 +28,6 @@ export const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    // createProduct: (state, action) => {
-    //   const { title, description, imageUrl, price } = action.payload;
-    //   const newProduct = new Product(new Date().toString(), 'u1', title, imageUrl, description, price).get();
-    //   return {
-    //     availableProducts: [...state.availableProducts, newProduct],
-    //     userProducts: [...state.userProducts, newProduct],
-    //   };
-    // },
     updateProduct: (state, action) => {
       const { productId, title, description, imageUrl } = action.payload;
       const productIndex = state.userProducts.findIndex((prod) => prod.id === productId);
@@ -57,26 +50,20 @@ export const productSlice = createSlice({
       };
     },
   },
-  extraReducers: {
-    [deleteProduct]: (state, action) => {
-      return {
-        userProducts: state.userProducts.filter((product) => product.id !== action.payload),
-        availableProducts: state.availableProducts.filter((product) => product.id !== action.payload),
-      };
-    },
-  },
   extraReducers: (builder) => {
-    builder.addCase(createProduct.pending, (state, action) => {
+    builder.addCase(deleteProduct, (state, action) => {
+      state.userProducts = state.userProducts.filter((product) => product.id !== action.payload);
+      state.availableProducts = state.availableProducts.filter((product) => product.id !== action.payload);
+    });
+    builder.addCase(createProduct.pending, (state, _action) => {
       state.loading = true;
     });
     builder.addCase(createProduct.fulfilled, (state, action) => {
       const { meta: { arg: { title, description, imageUrl, price } = {}, payload: { name } = {} } = {} } = action;
       const newProduct = new Product(name, 'u1', title, imageUrl, description, price).get();
-      return {
-        availableProducts: [...state.availableProducts, newProduct],
-        userProducts: [...state.userProducts, newProduct],
-        loading: false,
-      };
+      state.availableProducts = [...state.availableProducts, newProduct];
+      state.userProducts = [...state.userProducts, newProduct];
+      state.loading = false;
     });
   },
 });
