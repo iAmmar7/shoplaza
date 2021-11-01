@@ -8,7 +8,7 @@ import colors from '../../constants/colors';
 
 const UserProductsScreen = (props) => {
   const { navigation } = props;
-  const { userProducts } = useSelector((state) => state.products);
+  const { userProducts, loading, error } = useSelector((state) => state.products);
   const dispatch = useDispatch();
 
   const editProductHandler = (id) => {
@@ -27,6 +27,8 @@ const UserProductsScreen = (props) => {
       },
     ]);
   };
+
+  console.log('UserProductsScreen', loading, error);
 
   return (
     <FlatList

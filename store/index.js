@@ -10,6 +10,7 @@ const store = configureStore({
     cart: cartSlice,
     orders: orderSlice,
   },
+  devTools: true,
 });
 
 export default store;
