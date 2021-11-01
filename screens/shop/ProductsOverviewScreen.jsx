@@ -53,7 +53,13 @@ const ProductsOverviewScreen = (props) => {
     );
   }
 
-  // if(!loading && availableProducts.length === 0)
+  if (!loading && availableProducts.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text>No products found. Maybe start adding some!</Text>
+      </View>
+    );
+  }
 
   return (
     <FlatList
