@@ -1,8 +1,9 @@
 import React from 'react';
-import { FlatList, Button, Alert, View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { FlatList, Button, Alert, View, Text, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ProductItem from '../../components/shop/ProductItem';
+import Loader from '../../components/UI/Loader';
 import { deleteProduct } from '../../store/slices/products';
 import colors from '../../constants/colors';
 
@@ -32,14 +33,6 @@ const UserProductsScreen = (props) => {
     Alert.alert('An error occured!', error, [{ text: 'Okay' }]);
   }
 
-  if (loading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  }
-
   if (!loading && userProducts.length === 0) {
     return (
       <View style={styles.centered}>
@@ -49,29 +42,32 @@ const UserProductsScreen = (props) => {
   }
 
   return (
-    <FlatList
-      data={userProducts}
-      keyExtractor={(item) => item.id}
-      renderItem={(itemData) => (
-        <ProductItem
-          image={itemData.item.imageUrl}
-          title={itemData.item.title}
-          price={itemData.item.price}
-          onSelect={() => {
-            editProductHandler(itemData.item.id);
-          }}
-        >
-          <Button
-            color={colors.primary}
-            title="Edit"
-            onPress={() => {
+    <>
+      {loading && <Loader />}
+      <FlatList
+        data={userProducts}
+        keyExtractor={(item) => item.id}
+        renderItem={(itemData) => (
+          <ProductItem
+            image={itemData.item.imageUrl}
+            title={itemData.item.title}
+            price={itemData.item.price}
+            onSelect={() => {
               editProductHandler(itemData.item.id);
             }}
-          />
-          <Button color={colors.primary} title="Delete" onPress={() => deleteHandler(itemData.item.id)} />
-        </ProductItem>
-      )}
-    />
+          >
+            <Button
+              color={colors.primary}
+              title="Edit"
+              onPress={() => {
+                editProductHandler(itemData.item.id);
+              }}
+            />
+            <Button color={colors.primary} title="Delete" onPress={() => deleteHandler(itemData.item.id)} />
+          </ProductItem>
+        )}
+      />
+    </>
   );
 };
 

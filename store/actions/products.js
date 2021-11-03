@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import Product from '../../models/product';
 import { FIREBASE_URL } from '../../constants/api';

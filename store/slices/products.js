@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import Product from '../../models/product';
 import PRODUCTS from '../../data/dummy-data';
-
 import { fetchProducts, createProduct, deleteProduct, updateProduct } from '../actions/products';
 
 const initialState = {
