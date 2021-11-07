@@ -49,6 +49,8 @@ const OrdersScreen = () => {
     <>
       {loading && <Loader />}
       <FlatList
+        onRefresh={() => dispatch(fetchOrders())}
+        refreshing={loading}
         data={orders}
         keyExtractor={(item) => item.id}
         renderItem={(itemData) => {
