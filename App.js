@@ -6,7 +6,7 @@ import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { enableScreens } from 'react-native-screens';
 
-import ShopNavigator from './navigation/ShopNavigator';
+import AppNavigator from './navigation/AppNavigator';
 import store from './store';
 
 // Make RN use native (Android|iOS) screen behavior. Good for performance
@@ -35,7 +35,7 @@ function App() {
     <>
       <StatusBar style="auto" />
       <Provider store={store}>
-        <ShopNavigator />
+        <AppNavigator />
       </Provider>
     </>
   );
