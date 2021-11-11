@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useCallback } from 'react';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import {
   ScrollView,
   View,
@@ -8,6 +8,8 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,6 +47,7 @@ const formReducer = (state, action) => {
 const AuthScreen = () => {
   const [isSignup, setIsSignup] = useState(false);
   const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -57,6 +60,12 @@ const AuthScreen = () => {
     },
     formIsValid: false,
   });
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert('An Error Occurred!', error, [{ text: 'Okay' }]);
+    }
+  }, [error]);
 
   const authHandler = () => {
     if (isSignup) {
@@ -112,7 +121,16 @@ const AuthScreen = () => {
                 initialValue=""
               />
               <View style={styles.buttonContainer}>
-                <Button title={isSignup ? 'Sign Up' : 'Login'} color={colors.primary} onPress={authHandler} />
+                {loading ? (
+                  <ActivityIndicator size="small" color={colors.primary} />
+                ) : (
+                  <Button
+                    title={isSignup ? 'Sign Up' : 'Login'}
+                    color={colors.primary}
+                    onPress={authHandler}
+                    disabled={!formState.formIsValid}
+                  />
+                )}
               </View>
               <View style={styles.buttonContainer}>
                 <Button
