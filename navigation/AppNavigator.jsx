@@ -1,16 +1,24 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { DrawerNavigator, AuthNavigator } from './ShopNavigator';
+import { DrawerNavigator as ShopNavigator, AuthNavigator } from './ShopNavigator';
+import StartupScreen from '../screens/StartupScreen';
+import { logout } from '../store/slices/auth';
 
 const AppNavigator = () => {
-  const isAuth = useSelector((state) => !!state.auth.token);
+  const [isAuth, autoLoginTried] = useSelector((state) => [!!state.auth.token, state.auth.autoLoginTried]);
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
 
   return (
     <NavigationContainer>
-      {isAuth && <DrawerNavigator />}
-      {!isAuth && <AuthNavigator />}
+      {isAuth && <ShopNavigator logout={logoutHandler} />}
+      {!isAuth && autoLoginTried && <AuthNavigator />}
+      {!isAuth && !autoLoginTried && <StartupScreen />}
     </NavigationContainer>
   );
 };

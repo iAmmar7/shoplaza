@@ -7,15 +7,30 @@ const initialState = {
   error: null,
   token: null,
   userId: null,
+  autoLoginTried: false,
 };
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    setAutoLoginFailed(state) {
+      state.autoLoginTried = true;
+    },
+    authenticate(state, action) {
+      state.userId = action.payload.userId;
+      state.token = action.payload.token;
+      state.autoLoginTried = true;
+    },
+    logout(state) {
+      state.token = null;
+      state.userId = null;
+      state.autoLoginTried = true;
+    },
+  },
   extraReducers: (builder) => {
     // SignUp
-    builder.addCase(signUp.pending, (state, _action) => {
+    builder.addCase(signUp.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
@@ -31,7 +46,7 @@ export const authSlice = createSlice({
     });
 
     // Login
-    builder.addCase(login.pending, (state, _action) => {
+    builder.addCase(login.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
@@ -48,5 +63,7 @@ export const authSlice = createSlice({
     });
   },
 });
+
+export const { setAutoLoginFailed, authenticate, logout } = authSlice.actions;
 
 export default authSlice.reducer;

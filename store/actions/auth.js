@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { FIREBASE_AUTH_URL, FIREBASE_KEY } from '../../constants/api';
 
@@ -26,6 +27,9 @@ export const signUp = createAsyncThunk('auth/signUp', async ({ email, password }
   }
 
   const resData = await response.json();
+
+  const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000);
+  saveDataToStorage(resData.idToken, resData.refreshToken, resData.localId, expirationDate);
 
   return resData;
 });
@@ -57,5 +61,20 @@ export const login = createAsyncThunk('auth/login', async ({ email, password }) 
 
   const resData = await response.json();
 
+  const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000);
+  saveDataToStorage(resData.idToken, resData.refreshToken, resData.localId, expirationDate);
+
   return resData;
 });
+
+const saveDataToStorage = (token, refreshToken, userId, expirationDate) => {
+  AsyncStorage.setItem(
+    'userData',
+    JSON.stringify({
+      token,
+      refreshToken,
+      userId,
+      expiryDate: expirationDate.toISOString(),
+    })
+  );
+};

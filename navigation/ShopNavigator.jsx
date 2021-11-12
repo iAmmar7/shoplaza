@@ -1,7 +1,8 @@
 import React from 'react';
-import { Platform, Dimensions } from 'react-native';
+import { Platform, Dimensions, SafeAreaView, Button } from 'react-native';
+import Constants from 'expo-constants';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -153,12 +154,23 @@ const AdminNavigator = () => {
   );
 };
 
-export const DrawerNavigator = () => {
+export const DrawerNavigator = ({ logout }) => {
   return (
     <Drawer.Navigator
       screenOptions={{
         headerShown: false,
         drawerType: Dimensions.get('window').width >= 768 ? 'permanent' : 'front',
+      }}
+      drawerContent={(props) => {
+        return (
+          <SafeAreaView style={{ paddingTop: Constants.statusBarHeight }}>
+            <DrawerItemList {...props} />
+            <Button title="Logout" color={colors.primary} onPress={logout} />
+          </SafeAreaView>
+        );
+      }}
+      drawerContentOptions={{
+        activeTintColor: colors.primary,
       }}
     >
       <Drawer.Screen
