@@ -3,7 +3,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import Product from '../../models/product';
 import { FIREBASE_URL } from '../../constants/api';
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async (_, getState) => {
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async (_, store) => {
+  const {
+    auth: { userId },
+  } = store.getState();
+
   const response = await fetch(`${FIREBASE_URL}/products.json`);
 
   if (!response.ok) throw new Error('Something went wrong!');
@@ -16,7 +20,7 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async (_
     loadedProducts.push(
       new Product(
         key,
-        'u1',
+        resData[key].ownerId,
         resData[key].title,
         resData[key].imageUrl,
         resData[key].description,
@@ -24,24 +28,29 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async (_
       ).get()
     );
   }
-  return loadedProducts;
+
+  return {
+    products: loadedProducts,
+    userProducts: loadedProducts.filter((prod) => prod.ownerId === userId),
+  };
 });
 
 export const createProduct = createAsyncThunk('products/createProduct', async (data, store) => {
   const {
-    auth: { token },
+    auth: { token, userId },
   } = store.getState();
+
   const response = await fetch(`${FIREBASE_URL}/products.json?auth=${token}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ ...data, ownerId: userId }),
   });
 
   if (!response.ok) throw new Error('Something went wrong!');
 
-  return await response.json();
+  return { ...(await response.json()), ownerId: userId };
 });
 
 export const updateProduct = createAsyncThunk('products/updateProduct', async (data, store) => {

@@ -1,12 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import Product from '../../models/product';
-import PRODUCTS from '../../data/dummy-data';
 import { fetchProducts, createProduct, deleteProduct, updateProduct } from '../actions/products';
 
 const initialState = {
-  availableProducts: PRODUCTS,
-  userProducts: PRODUCTS.filter((prod) => prod.ownerId === 'u1'),
+  availableProducts: [],
+  userProducts: [],
   loading: false,
   error: null,
 };
@@ -22,9 +21,10 @@ export const productSlice = createSlice({
       state.error = null;
     });
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
-      state.availableProducts = action.payload;
-      state.userProducts = action.payload.filter((prod) => prod.ownerId === 'u1');
+      state.availableProducts = action.payload.products;
+      state.userProducts = action.payload.userProducts;
       state.loading = false;
+      state.error = null;
     });
     builder.addCase(fetchProducts.rejected, (state, action) => {
       console.log('Fetch Products Error: ', action.error);
@@ -40,9 +40,9 @@ export const productSlice = createSlice({
     builder.addCase(createProduct.fulfilled, (state, action) => {
       const {
         meta: { arg: { title, description, imageUrl, price } = {} },
-        payload: { name } = {},
+        payload: { name, ownerId } = {},
       } = action;
-      const newProduct = new Product(name, 'u1', title, imageUrl, description, price).get();
+      const newProduct = new Product(name, ownerId, title, imageUrl, description, price).get();
       state.availableProducts = [...state.availableProducts, newProduct];
       state.userProducts = [...state.userProducts, newProduct];
       state.loading = false;

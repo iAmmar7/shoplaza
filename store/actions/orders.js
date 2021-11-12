@@ -5,10 +5,11 @@ import { FIREBASE_URL } from '../../constants/api';
 
 export const addOrder = createAsyncThunk('orders/addOrder', async ({ cartItems, totalAmount }, store) => {
   const {
-    auth: { token },
+    auth: { token, userId },
   } = store.getState();
+
   const date = new Date();
-  const response = await fetch(`${FIREBASE_URL}/orders/u1.json?auth=${token}`, {
+  const response = await fetch(`${FIREBASE_URL}/orders/${userId}.json?auth=${token}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,8 +30,12 @@ export const addOrder = createAsyncThunk('orders/addOrder', async ({ cartItems, 
   return newOrder;
 });
 
-export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
-  const response = await fetch(`${FIREBASE_URL}/orders/u1.json`);
+export const fetchOrders = createAsyncThunk('orders/fetchOrders', async (_, store) => {
+  const {
+    auth: { userId },
+  } = store.getState();
+
+  const response = await fetch(`${FIREBASE_URL}/orders/${userId}.json`);
 
   if (!response.ok) throw new Error('Something went wrong!');
 

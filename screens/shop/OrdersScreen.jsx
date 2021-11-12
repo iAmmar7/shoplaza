@@ -40,7 +40,7 @@ const OrdersScreen = () => {
   if (!loading && orders.length === 0) {
     return (
       <View style={styles.centered}>
-        <Text>No orders found. Maybe start adding some!</Text>
+        <Text>No orders found. Maybe start oredering some?</Text>
       </View>
     );
   }
