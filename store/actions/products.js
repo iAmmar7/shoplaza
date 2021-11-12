@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import Product from '../../models/product';
 import { FIREBASE_URL } from '../../constants/api';
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async (_, getState) => {
   const response = await fetch(`${FIREBASE_URL}/products.json`);
 
   if (!response.ok) throw new Error('Something went wrong!');
@@ -27,8 +27,11 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async ()
   return loadedProducts;
 });
 
-export const createProduct = createAsyncThunk('products/createProduct', async (data) => {
-  const response = await fetch(`${FIREBASE_URL}/products.json`, {
+export const createProduct = createAsyncThunk('products/createProduct', async (data, store) => {
+  const {
+    auth: { token },
+  } = store.getState();
+  const response = await fetch(`${FIREBASE_URL}/products.json?auth=${token}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -41,9 +44,12 @@ export const createProduct = createAsyncThunk('products/createProduct', async (d
   return await response.json();
 });
 
-export const updateProduct = createAsyncThunk('products/updateProduct', async (data) => {
+export const updateProduct = createAsyncThunk('products/updateProduct', async (data, store) => {
+  const {
+    auth: { token },
+  } = store.getState();
   const { productId, title, description, imageUrl } = data;
-  const response = await fetch(`${FIREBASE_URL}/products/${productId}.json`, {
+  const response = await fetch(`${FIREBASE_URL}/products/${productId}.json?auth=${token}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -60,8 +66,11 @@ export const updateProduct = createAsyncThunk('products/updateProduct', async (d
   return await response.json();
 });
 
-export const deleteProduct = createAsyncThunk('products/deleteProduct', async (productId) => {
-  const response = await fetch(`${FIREBASE_URL}/products/${productId}.json`, {
+export const deleteProduct = createAsyncThunk('products/deleteProduct', async (productId, store) => {
+  const {
+    auth: { token },
+  } = store.getState();
+  const response = await fetch(`${FIREBASE_URL}/products/${productId}.json?auth=${token}`, {
     method: 'DELETE',
   });
 

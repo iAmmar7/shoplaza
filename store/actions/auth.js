@@ -27,8 +27,6 @@ export const signUp = createAsyncThunk('auth/signUp', async ({ email, password }
 
   const resData = await response.json();
 
-  console.log('resData', resData);
-
   return resData;
 });
 
@@ -58,8 +56,6 @@ export const login = createAsyncThunk('auth/login', async ({ email, password }) 
   }
 
   const resData = await response.json();
-
-  console.log('resData', resData);
 
   return resData;
 });

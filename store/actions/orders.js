@@ -3,9 +3,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import Order from '../../models/order';
 import { FIREBASE_URL } from '../../constants/api';
 
-export const addOrder = createAsyncThunk('orders/addOrder', async ({ cartItems, totalAmount }) => {
+export const addOrder = createAsyncThunk('orders/addOrder', async ({ cartItems, totalAmount }, store) => {
+  const {
+    auth: { token },
+  } = store.getState();
   const date = new Date();
-  const response = await fetch(`${FIREBASE_URL}/orders/u1.json`, {
+  const response = await fetch(`${FIREBASE_URL}/orders/u1.json?auth=${token}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

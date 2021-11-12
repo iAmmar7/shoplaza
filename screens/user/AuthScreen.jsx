@@ -51,8 +51,8 @@ const AuthScreen = () => {
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      email: '',
-      password: '',
+      email: 'johndoe@gmail.com',
+      password: '123456',
     },
     inputValidities: {
       email: false,
@@ -106,7 +106,7 @@ const AuthScreen = () => {
                 autoCapitalize="none"
                 errorText="Please enter a valid email address."
                 onInputChange={inputChangeHandler}
-                initialValue=""
+                initialValue="johndoe@gmail.com"
               />
               <Input
                 id="password"
@@ -118,7 +118,7 @@ const AuthScreen = () => {
                 autoCapitalize="none"
                 errorText="Please enter a valid password."
                 onInputChange={inputChangeHandler}
-                initialValue=""
+                initialValue="123456"
               />
               <View style={styles.buttonContainer}>
                 {loading ? (
@@ -128,7 +128,7 @@ const AuthScreen = () => {
                     title={isSignup ? 'Sign Up' : 'Login'}
                     color={colors.primary}
                     onPress={authHandler}
-                    disabled={!formState.formIsValid}
+                    // disabled={!formState.formIsValid}
                   />
                 )}
               </View>
