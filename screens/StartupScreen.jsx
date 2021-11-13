@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import colors from '../constants/colors';
-import { setAutoLoginFailed, authenticate } from '../store/slices/auth';
+import { setAutoLoginFailed, authenticate, refreshToken as refetchToken } from '../store/slices/auth';
 
 const StartupScreen = () => {
   const dispatch = useDispatch();
@@ -12,21 +11,30 @@ const StartupScreen = () => {
   useEffect(() => {
     const tryLogin = async () => {
       const userData = await AsyncStorage.getItem('userData');
+
+      // Set auto login failed
       if (!userData) {
         dispatch(setAutoLoginFailed());
         return;
       }
       const transformedData = JSON.parse(userData);
-      const { token, userId, expiryDate } = transformedData;
+      const { token, userId, expiryDate, refreshToken } = transformedData;
       const expirationDate = new Date(expiryDate);
 
-      if (expirationDate <= new Date() || !token || !userId) {
+      // Set auto login failed
+      if (!token || !userId) {
         dispatch(setAutoLoginFailed());
         return;
       }
 
-      const expirationTime = expirationDate.getTime() - new Date().getTime();
+      // Refetch new token if the old one has expired
+      if (expirationDate <= new Date()) {
+        dispatch(refetchToken(refreshToken));
+        return;
+      }
 
+      // Auto login user if everything is okay in AysncStorage
+      const expirationTime = expirationDate.getTime() - new Date().getTime();
       dispatch(authenticate({ userId, token, expirationTime }));
     };
 

@@ -160,6 +160,7 @@ export const DrawerNavigator = ({ logout }) => {
       screenOptions={{
         headerShown: false,
         drawerType: Dimensions.get('window').width >= 768 ? 'permanent' : 'front',
+        activeTintColor: colors.primary,
       }}
       drawerContent={(props) => {
         return (
@@ -168,9 +169,6 @@ export const DrawerNavigator = ({ logout }) => {
             <Button title="Logout" color={colors.primary} onPress={logout} />
           </SafeAreaView>
         );
-      }}
-      drawerContentOptions={{
-        activeTintColor: colors.primary,
       }}
     >
       <Drawer.Screen
