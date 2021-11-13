@@ -1,7 +1,9 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { FIREBASE_AUTH_URL, FIREBASE_KEY } from '../../constants/api';
+
+let timer;
 
 const saveDataToStorage = (token, refreshToken, userId, expirationDate) => {
   AsyncStorage.setItem(
@@ -100,3 +102,38 @@ export const refreshToken = createAsyncThunk('auth/refreshToken', async (token) 
 
   return resData;
 });
+
+export const authenticate = createAsyncThunk(
+  'auth/authenticate',
+  ({ token, refreshToken, userId, expirationTime }, { dispatch }) => {
+    dispatch(setLogoutTimer({ refreshToken, expirationTime }));
+    return {
+      token,
+      userId,
+    };
+  }
+);
+
+export const logout = createAction('auth/logout', () => {
+  clearLogoutTimer();
+  AsyncStorage.removeItem('userData');
+  return {};
+});
+
+// Clear the timer when user LogOut
+const clearLogoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+};
+
+// Start a timer every time user Login, Signup, or Authenticate
+const setLogoutTimer = createAsyncThunk(
+  'auth/setLogoutTimer',
+  ({ refreshToken: token, expirationTime }, { dispatch }) => {
+    timer = setTimeout(() => {
+      // If the timer (token) has expired then refetch the token
+      dispatch(refreshToken(token));
+    }, expirationTime);
+  }
+);

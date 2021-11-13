@@ -35,7 +35,7 @@ const StartupScreen = () => {
 
       // Auto login user if everything is okay in AysncStorage
       const expirationTime = expirationDate.getTime() - new Date().getTime();
-      dispatch(authenticate({ userId, token, expirationTime }));
+      dispatch(authenticate({ userId, token, refreshToken, expirationTime }));
     };
 
     tryLogin();

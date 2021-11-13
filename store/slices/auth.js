@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { signUp, login, refreshToken } from '../actions/auth';
+import { signUp, login, refreshToken, authenticate, logout } from '../actions/auth';
 
 const initialState = {
   loading: false,
@@ -15,16 +15,6 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setAutoLoginFailed(state) {
-      state.autoLoginTried = true;
-    },
-    authenticate(state, action) {
-      state.userId = action.payload.userId;
-      state.token = action.payload.token;
-      state.autoLoginTried = true;
-    },
-    logout(state) {
-      state.token = null;
-      state.userId = null;
       state.autoLoginTried = true;
     },
   },
@@ -79,11 +69,25 @@ export const authSlice = createSlice({
       state.loading = false;
       state.error = action.error?.message ?? 'Unable to refetch the token!';
     });
+
+    // Authenticate
+    builder.addCase(authenticate.fulfilled, (state, action) => {
+      state.userId = action.payload.userId;
+      state.token = action.payload.token;
+      state.autoLoginTried = true;
+    });
+
+    // Logout
+    builder.addCase(logout, (state) => {
+      state.token = null;
+      state.userId = null;
+      state.autoLoginTried = false;
+    });
   },
 });
 
-export const { setAutoLoginFailed, authenticate, logout } = authSlice.actions;
+export const { setAutoLoginFailed } = authSlice.actions;
 
-export { signUp, login, refreshToken };
+export { signUp, login, refreshToken, authenticate, logout };
 
 export default authSlice.reducer;
