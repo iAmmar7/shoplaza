@@ -6,20 +6,19 @@ import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Ionicons } from '@expo/vector-icons';
 
-import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
-import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
-import CartScreen from '../screens/shop/CartScreen';
-import OrdersScreen from '../screens/shop/OrdersScreen';
-import UserProductsScreen from '../screens/user/UserProductsScreen';
-import EditProductScreen from '../screens/user/EditProductScreen';
-import AuthScreen from '../screens/user/AuthScreen';
-import HeaderButton from '../components/UI/HeaderButton';
+import ProductsOverviewScreen from '../screens/ProductsOverviewScreen';
+import ProductDetailScreen from '../screens/ProductDetailScreen';
+import CartScreen from '../screens/CartScreen';
+import OrdersScreen from '../screens/OrdersScreen';
+import UserProductsScreen from '../screens/UserProductsScreen';
+import EditProductScreen from '../screens/EditProductScreen';
+import HeaderButton from '../components/HeaderButton';
 import colors from '../constants/colors';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const defaultStackOptions = {
+export const defaultStackOptions = {
   headerStyle: {
     backgroundColor: Platform.OS === 'android' ? colors.primary : colors.white,
   },
@@ -154,7 +153,7 @@ const AdminNavigator = () => {
   );
 };
 
-export const DrawerNavigator = ({ logout }) => {
+const DrawerNavigator = ({ logout }) => {
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -205,16 +204,4 @@ export const DrawerNavigator = ({ logout }) => {
   );
 };
 
-export const AuthNavigator = () => {
-  return (
-    <Stack.Navigator screenOptions={defaultStackOptions}>
-      <Stack.Screen
-        name="Auth"
-        component={AuthScreen}
-        options={() => ({
-          title: 'Authenticate',
-        })}
-      />
-    </Stack.Navigator>
-  );
-};
+export default DrawerNavigator;

@@ -2,10 +2,10 @@ import React from 'react';
 import { FlatList, Button, Alert, View, Text, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
-import ProductItem from '../../components/shop/ProductItem';
-import Loader from '../../components/UI/Loader';
-import { deleteProduct } from '../../store/slices/products';
-import colors from '../../constants/colors';
+import ProductItem from '../components/ProductItem';
+import Loader from '../components/Loader';
+import { deleteProduct } from '../store/slices/products';
+import colors from '../constants/colors';
 
 const UserProductsScreen = (props) => {
   const { navigation } = props;

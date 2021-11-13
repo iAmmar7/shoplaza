@@ -3,9 +3,9 @@ import { View, ScrollView, Alert, StyleSheet, KeyboardAvoidingView } from 'react
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-import HeaderButton from '../../components/UI/HeaderButton';
-import Input from '../../components/UI/Input';
-import { createProduct, updateProduct } from '../../store/slices/products';
+import HeaderButton from '../components/HeaderButton';
+import Input from '../components/Input';
+import { createProduct, updateProduct } from '../store/slices/products';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 

@@ -14,10 +14,10 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Input from '../../components/UI/Input';
-import Card from '../../components/UI/Card';
-import { signUp, login } from '../../store/actions/auth';
-import colors from '../../constants/colors';
+import Input from '../components/Input';
+import Card from '../components/Card';
+import { signUp, login } from '../store/actions/auth';
+import colors from '../constants/colors';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 

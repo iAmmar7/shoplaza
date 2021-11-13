@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, TouchableNativeFeedback, Platform } from 'react-native';
 
-import Card from '../UI/Card';
+import Card from './Card';
 
 const ProductItem = (props) => {
   const { title, image, price, onSelect, children } = props;

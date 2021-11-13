@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { FlatList, Button, View, Text, Pressable, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
-import ProductItem from '../../components/shop/ProductItem';
-import Loader from '../../components/UI/Loader';
-import { addToCart } from '../../store/slices/cart';
-import { fetchProducts } from '../../store/slices/products';
-import colors from '../../constants/colors';
+import ProductItem from '../components/ProductItem';
+import Loader from '../components/Loader';
+import { addToCart } from '../store/slices/cart';
+import { fetchProducts } from '../store/slices/products';
+import colors from '../constants/colors';
 
 const ProductsOverviewScreen = (props) => {
   const { navigation } = props;

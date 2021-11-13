@@ -3,10 +3,10 @@ import { FlatList, StyleSheet, View, Text, Pressable } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 
-import Loader from '../../components/UI/Loader';
-import OrderItem from '../../components/shop/OrderItem';
-import { fetchOrders } from '../../store/slices/orders';
-import colors from '../../constants/colors';
+import Loader from '../components/Loader';
+import OrderItem from '../components/OrderItem';
+import { fetchOrders } from '../store/slices/orders';
+import colors from '../constants/colors';
 
 const readableDate = (date) => {
   return dayjs(date).format('MMMM DD YYYY, hh:mm');

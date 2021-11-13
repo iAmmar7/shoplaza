@@ -2,7 +2,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { DrawerNavigator as ShopNavigator, AuthNavigator } from './ShopNavigator';
+import NonAuthNavigator from './NonAuthNavigator';
+import AuthNavigator from './AuthNavigator';
 import StartupScreen from '../screens/StartupScreen';
 import { logout } from '../store/slices/auth';
 
@@ -16,8 +17,8 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      {isAuth && <ShopNavigator logout={logoutHandler} />}
-      {!isAuth && autoLoginTried && <AuthNavigator />}
+      {isAuth && <AuthNavigator logout={logoutHandler} />}
+      {!isAuth && autoLoginTried && <NonAuthNavigator />}
       {!isAuth && !autoLoginTried && <StartupScreen />}
     </NavigationContainer>
   );

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
 import CartItem from './CartItem';
-import Card from '../UI/Card';
-import colors from '../../constants/colors';
+import Card from './Card';
+import colors from '../constants/colors';
 
 const OrderItem = (props) => {
   const { amount, date, items } = props;

@@ -2,12 +2,12 @@ import React, { useMemo } from 'react';
 import { View, Text, FlatList, Button, StyleSheet, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
-import CartItem from '../../components/shop/CartItem';
-import Card from '../../components/UI/Card';
-import Loader from '../../components/UI/Loader';
-import { removeFromCart } from '../../store/slices/cart';
-import { addOrder } from '../../store/slices/orders';
-import colors from '../../constants/colors';
+import CartItem from '../components/CartItem';
+import Card from '../components/Card';
+import Loader from '../components/Loader';
+import { removeFromCart } from '../store/slices/cart';
+import { addOrder } from '../store/slices/orders';
+import colors from '../constants/colors';
 
 const CartScreen = () => {
   const [{ totalAmount, items }, { loading, error }] = useSelector((state) => [state.cart, state.orders]);

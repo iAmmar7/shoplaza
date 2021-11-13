@@ -2,8 +2,8 @@ import React from 'react';
 import { ScrollView, View, Text, Image, Button, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { addToCart } from '../../store/slices/cart';
-import colors from '../../constants/colors';
+import { addToCart } from '../store/slices/cart';
+import colors from '../constants/colors';
 
 const ProductDetailScreen = (props) => {
   const {
