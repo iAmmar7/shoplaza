@@ -1,5 +1,5 @@
-import React from 'react';
-import { Platform, Dimensions } from 'react-native';
+import React, { useContext } from 'react';
+import { Platform, Dimensions, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -13,29 +13,33 @@ import UserProductsScreen from '../screens/UserProductsScreen';
 import EditProductScreen from '../screens/EditProductScreen';
 import HeaderButton from '../components/HeaderButton';
 import DrawerItems from '../components/DrawerItems';
-import colors from '../constants/colors';
+import { AppContext } from '../context/ContextProvider';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-export const defaultStackOptions = {
-  headerStyle: {
-    backgroundColor: Platform.OS === 'android' ? colors.primary : colors.white,
-  },
-  headerTitleStyle: {
-    color: colors.white,
-    fontFamily: 'open-sans-bold',
-  },
-  headerBackTitleStyle: {
-    color: colors.white,
-    fontFamily: 'open-sans',
-  },
-  headerTintColor: Platform.OS === 'android' ? colors.white : colors.primary,
+export const defaultStackOptions = () => {
+  const { colors } = useContext(AppContext);
+
+  return {
+    headerStyle: {
+      backgroundColor: Platform.OS === 'android' ? colors.primary : colors.secondary,
+    },
+    headerTitleStyle: {
+      color: Platform.OS === 'android' ? 'white' : colors.primary,
+      fontFamily: 'open-sans-bold',
+    },
+    headerBackTitleStyle: {
+      color: colors.secondary,
+      fontFamily: 'open-sans',
+    },
+    headerTintColor: Platform.OS === 'android' ? colors.secondary : colors.primary,
+  };
 };
 
 const ProductsNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={defaultStackOptions}>
+    <Stack.Navigator screenOptions={defaultStackOptions()}>
       <Stack.Screen
         name="ProductsOverview"
         component={ProductsOverviewScreen}
@@ -87,7 +91,7 @@ const ProductsNavigator = () => {
 
 const OrdersNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={defaultStackOptions}>
+    <Stack.Navigator screenOptions={defaultStackOptions()}>
       <Stack.Screen
         name="Orders"
         component={OrdersScreen}
@@ -112,7 +116,7 @@ const OrdersNavigator = () => {
 
 const AdminNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={defaultStackOptions}>
+    <Stack.Navigator screenOptions={defaultStackOptions()}>
       <Stack.Screen
         name="UserProducts"
         component={UserProductsScreen}
@@ -154,12 +158,15 @@ const AdminNavigator = () => {
 };
 
 const DrawerNavigator = ({ logout }) => {
+  const { colors } = useContext(AppContext);
+
   return (
     <Drawer.Navigator
       screenOptions={{
         headerShown: false,
         drawerType: Dimensions.get('window').width >= 768 ? 'permanent' : 'front',
-        activeTintColor: colors.primary,
+        drawerActiveTintColor: colors.primary,
+        drawerInactiveTintColor: 'red',
       }}
       drawerContent={(props) => <DrawerItems logout={logout} {...props} />}
     >
@@ -167,19 +174,33 @@ const DrawerNavigator = ({ logout }) => {
         name="ProductsDrawer"
         component={ProductsNavigator}
         options={() => ({
-          drawerLabel: 'Products',
-          drawerIcon: ({ color }) => (
-            <Ionicons name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'} size={23} color={color} />
+          drawerLabel: ({ focused, color }) => (
+            <Text style={{ color: focused ? color : colors.text, fontFamily: 'open-sans' }}>Products</Text>
           ),
+          drawerIcon: ({ focused, color }) => {
+            return (
+              <Ionicons
+                name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+                size={23}
+                color={focused ? color : colors.text}
+              />
+            );
+          },
         })}
       />
       <Drawer.Screen
         name="OrdersDrawer"
         component={OrdersNavigator}
         options={() => ({
-          drawerLabel: 'Orders',
-          drawerIcon: ({ color }) => (
-            <Ionicons name={Platform.OS === 'android' ? 'md-list' : 'ios-list'} size={23} color={color} />
+          drawerLabel: ({ focused, color }) => (
+            <Text style={{ color: focused ? color : colors.text, fontFamily: 'open-sans' }}>Orders</Text>
+          ),
+          drawerIcon: ({ focused, color }) => (
+            <Ionicons
+              name={Platform.OS === 'android' ? 'md-list' : 'ios-list'}
+              size={23}
+              color={focused ? color : colors.text}
+            />
           ),
         })}
       />
@@ -187,9 +208,15 @@ const DrawerNavigator = ({ logout }) => {
         name="AdminDrawer"
         component={AdminNavigator}
         options={() => ({
-          drawerLabel: 'Admin',
-          drawerIcon: ({ color }) => (
-            <Ionicons name={Platform.OS === 'android' ? 'md-create' : 'ios-create'} size={23} color={color} />
+          drawerLabel: ({ focused, color }) => (
+            <Text style={{ color: focused ? color : colors.text, fontFamily: 'open-sans' }}>Admin</Text>
+          ),
+          drawerIcon: ({ focused, color }) => (
+            <Ionicons
+              name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+              size={23}
+              color={focused ? color : colors.text}
+            />
           ),
         })}
       />

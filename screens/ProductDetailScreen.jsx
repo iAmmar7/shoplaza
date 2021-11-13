@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ScrollView, View, Text, Image, Button, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { AppContext } from '../context/ContextProvider';
 import { addToCart } from '../store/slices/cart';
-import colors from '../constants/colors';
 
 const ProductDetailScreen = (props) => {
   const {
@@ -15,9 +15,11 @@ const ProductDetailScreen = (props) => {
     state.products.availableProducts.find((prod) => prod.id === productId)
   );
   const dispatch = useDispatch();
+  const { colors } = useContext(AppContext);
+  const styles = useStyles(colors);
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.scrollView}>
       <Image style={styles.image} source={{ uri: selectedProduct.imageUrl }} />
       <View style={styles.actions}>
         <Button
@@ -34,28 +36,34 @@ const ProductDetailScreen = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: 300,
-  },
-  actions: {
-    marginVertical: 10,
-    alignItems: 'center',
-  },
-  price: {
-    fontSize: 20,
-    color: '#888',
-    textAlign: 'center',
-    marginVertical: 20,
-    fontFamily: 'open-sans-bold',
-  },
-  description: {
-    fontFamily: 'open-sans',
-    fontSize: 14,
-    textAlign: 'center',
-    marginHorizontal: 20,
-  },
-});
+const useStyles = (colors) =>
+  StyleSheet.create({
+    scrollView: {
+      backgroundColor: colors.secondary,
+    },
+    image: {
+      width: '100%',
+      height: 300,
+      backgroundColor: 'white',
+    },
+    actions: {
+      marginVertical: 10,
+      alignItems: 'center',
+    },
+    price: {
+      fontSize: 20,
+      color: '#888',
+      textAlign: 'center',
+      marginVertical: 20,
+      fontFamily: 'open-sans-bold',
+    },
+    description: {
+      fontFamily: 'open-sans',
+      fontSize: 16,
+      textAlign: 'center',
+      marginHorizontal: 20,
+      color: colors.text,
+    },
+  });
 
 export default ProductDetailScreen;

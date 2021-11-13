@@ -7,6 +7,7 @@ import AppLoading from 'expo-app-loading';
 import { enableScreens } from 'react-native-screens';
 
 import AppNavigator from './navigation/AppNavigator';
+import AppContextProvider from './context/ContextProvider';
 import store from './store';
 
 // Make RN use native (Android|iOS) screen behavior. Good for performance
@@ -35,7 +36,9 @@ function App() {
     <>
       <StatusBar style="auto" />
       <Provider store={store}>
-        <AppNavigator />
+        <AppContextProvider>
+          <AppNavigator />
+        </AppContextProvider>
       </Provider>
     </>
   );

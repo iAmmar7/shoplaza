@@ -1,10 +1,11 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 
 import NonAuthNavigator from './NonAuthNavigator';
 import AuthNavigator from './AuthNavigator';
 import StartupScreen from '../screens/StartupScreen';
+import { AppContext } from '../context/ContextProvider';
 import { logout } from '../store/slices/auth';
 
 const AppNavigator = () => {

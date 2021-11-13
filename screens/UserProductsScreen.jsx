@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FlatList, Button, Alert, View, Text, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ProductItem from '../components/ProductItem';
 import Loader from '../components/Loader';
+import { AppContext } from '../context/ContextProvider';
 import { deleteProduct } from '../store/slices/products';
-import colors from '../constants/colors';
 
 const UserProductsScreen = (props) => {
   const { navigation } = props;
   const { userProducts, loading, error } = useSelector((state) => state.products);
   const dispatch = useDispatch();
+  const { colors } = useContext(AppContext);
 
   const editProductHandler = (id) => {
     navigation.navigate('EditProduct', { productId: id });
@@ -52,6 +53,7 @@ const UserProductsScreen = (props) => {
             image={itemData.item.imageUrl}
             title={itemData.item.title}
             price={itemData.item.price}
+            colors={colors}
             onSelect={() => {
               editProductHandler(itemData.item.id);
             }}

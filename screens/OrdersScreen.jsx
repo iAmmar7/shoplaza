@@ -82,6 +82,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   buttonText: {
-    color: colors.white,
+    color: colors.secondary,
   },
 });
