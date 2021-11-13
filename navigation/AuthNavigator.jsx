@@ -1,8 +1,7 @@
 import React from 'react';
-import { Platform, Dimensions, SafeAreaView, Button } from 'react-native';
-import Constants from 'expo-constants';
+import { Platform, Dimensions } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -13,6 +12,7 @@ import OrdersScreen from '../screens/OrdersScreen';
 import UserProductsScreen from '../screens/UserProductsScreen';
 import EditProductScreen from '../screens/EditProductScreen';
 import HeaderButton from '../components/HeaderButton';
+import DrawerItems from '../components/DrawerItems';
 import colors from '../constants/colors';
 
 const Stack = createNativeStackNavigator();
@@ -161,14 +161,7 @@ const DrawerNavigator = ({ logout }) => {
         drawerType: Dimensions.get('window').width >= 768 ? 'permanent' : 'front',
         activeTintColor: colors.primary,
       }}
-      drawerContent={(props) => {
-        return (
-          <SafeAreaView style={{ paddingTop: Constants.statusBarHeight }}>
-            <DrawerItemList {...props} />
-            <Button title="Logout" color={colors.primary} onPress={logout} />
-          </SafeAreaView>
-        );
-      }}
+      drawerContent={(props) => <DrawerItems logout={logout} {...props} />}
     >
       <Drawer.Screen
         name="ProductsDrawer"
