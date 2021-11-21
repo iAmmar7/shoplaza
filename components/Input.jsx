@@ -1,5 +1,7 @@
-import React, { memo, useReducer, useEffect } from 'react';
+import React, { memo, useReducer, useEffect, useContext } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+
+import { AppContext } from '../context/ContextProvider';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
@@ -23,13 +25,14 @@ const inputReducer = (state, action) => {
 };
 
 const Input = (props) => {
+  const { onInputChange, id } = props;
+  const { colors } = useContext(AppContext);
+  const styles = useStyles(colors);
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : '',
     isValid: props.initiallyValid,
     touched: false,
   });
-
-  const { onInputChange, id } = props;
 
   useEffect(() => {
     if (inputState.touched) {
@@ -66,45 +69,53 @@ const Input = (props) => {
   return (
     <View style={styles.formControl}>
       <Text style={styles.label}>{props.label}</Text>
-      <TextInput
-        {...props}
-        style={styles.input}
-        value={inputState.value}
-        onChangeText={textChangeHandler}
-        onBlur={lostFocusHandler}
-      />
-      {!inputState.isValid && inputState.touched && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{props.errorText}</Text>
-        </View>
-      )}
+      <View style={styles.inputArea}>
+        <TextInput
+          {...props}
+          style={styles.input}
+          value={inputState.value}
+          onChangeText={textChangeHandler}
+          onBlur={lostFocusHandler}
+        />
+        {!inputState.isValid && inputState.touched && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{props.errorText}</Text>
+          </View>
+        )}
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  formControl: {
-    width: '100%',
-  },
-  label: {
-    fontFamily: 'open-sans-bold',
-    marginVertical: 8,
-  },
-  input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
-  },
-  errorContainer: {
-    marginVertical: 5,
-  },
-  errorText: {
-    fontFamily: 'open-sans',
-    color: 'red',
-    fontSize: 13,
-  },
-});
+const useStyles = (colors) =>
+  StyleSheet.create({
+    formControl: {
+      width: '100%',
+    },
+    label: {
+      fontFamily: 'open-sans-bold',
+      marginBottom: 2,
+      color: colors.text,
+    },
+    input: {
+      paddingHorizontal: 2,
+      paddingVertical: 5,
+      borderBottomColor: '#ccc',
+      borderBottomWidth: 1,
+      color: colors.text,
+    },
+    errorContainer: {
+      marginVertical: 5,
+    },
+    errorText: {
+      fontFamily: 'open-sans',
+      color: colors.accent,
+      fontSize: 13,
+    },
+    inputArea: {
+      marginBottom: 20,
+    },
+  });
 
 // export default memo(Input, (prevProps, newProps) => {
 //   console.log('memo', prevProps, newProps);

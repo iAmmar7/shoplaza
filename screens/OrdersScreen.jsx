@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { FlatList, StyleSheet, View, Text, Pressable } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 
 import Loader from '../components/Loader';
 import OrderItem from '../components/OrderItem';
+import { AppContext } from '../context/ContextProvider';
 import { fetchOrders } from '../store/slices/orders';
-import colors from '../constants/colors';
 
 const readableDate = (date) => {
   return dayjs(date).format('MMMM DD YYYY, hh:mm');
@@ -14,6 +14,8 @@ const readableDate = (date) => {
 
 const OrdersScreen = () => {
   const { orders, loading, error } = useSelector((state) => state.orders);
+  const { colors } = useContext(AppContext);
+  const styles = useStyles(colors);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -53,6 +55,7 @@ const OrdersScreen = () => {
         refreshing={loading}
         data={orders}
         keyExtractor={(item) => item.id}
+        style={styles.flatList}
         renderItem={(itemData) => {
           return (
             <OrderItem
@@ -69,19 +72,25 @@ const OrdersScreen = () => {
 
 export default OrdersScreen;
 
-const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    marginVertical: 10,
-    backgroundColor: colors.primary,
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-  },
-  buttonText: {
-    color: colors.secondary,
-  },
-});
+const useStyles = (colors) =>
+  StyleSheet.create({
+    flatList: {
+      flex: 1,
+      backgroundColor: colors.secondary,
+    },
+    centered: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.secondary,
+    },
+    button: {
+      marginVertical: 10,
+      backgroundColor: colors.primary,
+      paddingVertical: 6,
+      paddingHorizontal: 8,
+    },
+    buttonText: {
+      color: colors.secondary,
+    },
+  });

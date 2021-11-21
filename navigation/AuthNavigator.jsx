@@ -33,7 +33,7 @@ export const defaultStackOptions = () => {
       color: colors.secondary,
       fontFamily: 'open-sans',
     },
-    headerTintColor: Platform.OS === 'android' ? colors.secondary : colors.primary,
+    headerTintColor: Platform.OS === 'android' ? 'white' : colors.primary,
   };
 };
 

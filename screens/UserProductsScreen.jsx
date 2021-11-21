@@ -12,6 +12,7 @@ const UserProductsScreen = (props) => {
   const { userProducts, loading, error } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   const { colors } = useContext(AppContext);
+  const styles = useStyles(colors);
 
   const editProductHandler = (id) => {
     navigation.navigate('EditProduct', { productId: id });
@@ -48,6 +49,7 @@ const UserProductsScreen = (props) => {
       <FlatList
         data={userProducts}
         keyExtractor={(item) => item.id}
+        style={styles.flatList}
         renderItem={(itemData) => (
           <ProductItem
             image={itemData.item.imageUrl}
@@ -73,12 +75,18 @@ const UserProductsScreen = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+const useStyles = (colors) =>
+  StyleSheet.create({
+    flatList: {
+      flex: 1,
+      backgroundColor: colors.secondary,
+    },
+    centered: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.secondary,
+    },
+  });
 
 export default UserProductsScreen;

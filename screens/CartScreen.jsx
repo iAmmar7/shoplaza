@@ -1,16 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
 import { View, Text, FlatList, Button, StyleSheet, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import CartItem from '../components/CartItem';
 import Card from '../components/Card';
 import Loader from '../components/Loader';
+import { AppContext } from '../context/ContextProvider';
 import { removeFromCart } from '../store/slices/cart';
 import { addOrder } from '../store/slices/orders';
-import colors from '../constants/colors';
 
 const CartScreen = () => {
   const [{ totalAmount, items }, { loading, error }] = useSelector((state) => [state.cart, state.orders]);
+  const { colors } = useContext(AppContext);
+  const styles = useStyles(colors);
   const dispatch = useDispatch();
 
   const cartItems = useMemo(() => {
@@ -32,7 +34,7 @@ const CartScreen = () => {
   }
 
   return (
-    <>
+    <View style={styles.container}>
       {loading && <Loader />}
       <View style={styles.screen}>
         <Card style={styles.summary}>
@@ -64,28 +66,34 @@ const CartScreen = () => {
           )}
         />
       </View>
-    </>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  screen: {
-    margin: 20,
-  },
-  summary: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-    padding: 10,
-  },
-  summaryText: {
-    fontFamily: 'open-sans-bold',
-    fontSize: 18,
-  },
-  amount: {
-    color: colors.primary,
-  },
-});
+const useStyles = (colors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.secondary,
+    },
+    screen: {
+      margin: 20,
+    },
+    summary: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 20,
+      padding: 10,
+    },
+    summaryText: {
+      fontFamily: 'open-sans-bold',
+      fontSize: 18,
+      color: colors.text,
+    },
+    amount: {
+      color: colors.primary,
+    },
+  });
 
 export default CartScreen;

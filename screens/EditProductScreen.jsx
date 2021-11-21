@@ -1,10 +1,11 @@
-import React, { useReducer, useEffect, useCallback } from 'react';
+import React, { useReducer, useEffect, useCallback, useContext } from 'react';
 import { View, ScrollView, Alert, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../components/HeaderButton';
 import Input from '../components/Input';
+import { AppContext } from '../context/ContextProvider';
 import { createProduct, updateProduct } from '../store/slices/products';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
@@ -39,6 +40,8 @@ const EditProductScreen = (props) => {
   } = props;
   const editedProduct = useSelector((state) => state.products.userProducts.find((prod) => prod.id === productId));
   const dispatch = useDispatch();
+  const { colors } = useContext(AppContext);
+  const styles = useStyles(colors);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: editedProduct ? editedProduct.title : '',
@@ -108,7 +111,7 @@ const EditProductScreen = (props) => {
   );
 
   return (
-    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={10}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={10}>
       <ScrollView>
         <View style={styles.form}>
           <Input
@@ -168,10 +171,15 @@ const EditProductScreen = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  form: {
-    margin: 20,
-  },
-});
+const useStyles = (colors) =>
+  StyleSheet.create({
+    form: {
+      margin: 20,
+    },
+    container: {
+      flex: 1,
+      backgroundColor: colors.secondary,
+    },
+  });
 
 export default EditProductScreen;

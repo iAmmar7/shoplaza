@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
 import CartItem from './CartItem';
 import Card from './Card';
-import colors from '../constants/colors';
+import { AppContext } from '../context/ContextProvider';
 
 const OrderItem = (props) => {
   const { amount, date, items } = props;
+  const { colors } = useContext(AppContext);
+  const styles = useStyles(colors);
   const [showDetails, setShowDetails] = useState(false);
 
   return (
@@ -38,31 +40,34 @@ const OrderItem = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  orderItem: {
-    margin: 20,
-    padding: 10,
-    alignItems: 'center',
-  },
-  summary: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 15,
-  },
-  totalAmount: {
-    fontFamily: 'open-sans-bold',
-    fontSize: 16,
-  },
-  date: {
-    fontSize: 16,
-    fontFamily: 'open-sans',
-    color: '#888',
-  },
-  detailItems: {
-    width: '100%',
-  },
-});
+const useStyles = (colors) =>
+  StyleSheet.create({
+    orderItem: {
+      margin: 20,
+      padding: 10,
+      alignItems: 'center',
+    },
+    summary: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+      marginBottom: 15,
+    },
+    totalAmount: {
+      fontFamily: 'open-sans-bold',
+      fontSize: 16,
+      color: colors.text,
+    },
+    date: {
+      fontSize: 16,
+      fontFamily: 'open-sans',
+      color: '#888',
+    },
+    detailItems: {
+      width: '100%',
+      marginTop: 10,
+    },
+  });
 
 export default OrderItem;
