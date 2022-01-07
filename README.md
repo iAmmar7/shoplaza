@@ -1,7 +1,7 @@
 # shoplaza
 A basic view of multi vendor e-commerce mobile application :boom:
 
-## *Purpose*
+## Purpose
 > The purpose of this project is to learn how to integrate **Firebase** with **React Native** application based on **Expo** :bangbang:
 
 ## Snack
